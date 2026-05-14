@@ -40,7 +40,7 @@ ng version
 ## Clone Repository
 
 ```bash
-git clone https://github.com/sachinyadavcoder/wad-practicals/tree/main/Angular
+git clone https://github.com/sachinyadavcoder/wad-practicals.git
 ```
 
 Go to the Angular project folder:
