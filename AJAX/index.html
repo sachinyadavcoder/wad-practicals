@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="container-box">
+            <div class="d-flex justify-content-between align-items-center mb-md-4">
+                <h2>User Management</h2>
+
+                <!-- button -->
+                <button class="btn-success btn " data-bs-toggle="modal" data-bs-target="#userModal">
+                    Create User
+                </button>
+
+            </div>
+
+            <!-- usertable -->
+
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable">
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="userModal">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <h5 class="modal-title">Create User</h5>
+
+                    <button class="btn-close" data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    <form id="userForm">
+
+                        <input type="text" id="name" class="form-control mb-3" placeholder="Enter Name" required>
+
+                        <input type="email" id="email" class="form-control mb-3" placeholder="Enter Email" required>
+
+                        <input type="password" id="password" class="form-control mb-3" placeholder="Enter Password"
+                            required>
+
+                        <button class="btn btn-primary w-100">
+
+                            Save User
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+      // Table body
+    const userTable = document.getElementById("userTable");
+
+    // Form
+    const form = document.getElementById("userForm");
+
+
+    // Load users when page opens
+    displayUsers();
+
+
+
+    // Submit Form
+    form.addEventListener("submit", function(e){
+
+        e.preventDefault();
+
+
+        // Get values
+        const name = document.getElementById("name").value;
+
+        const email = document.getElementById("email").value;
+
+        const password = document.getElementById("password").value;
+
+
+
+        // Create object
+        const user = {
+            name,
+            email,
+            password
+        };
+
+
+
+        // Get existing users
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+
+
+        // Add new user
+        users.push(user);
+
+
+
+        // Save back
+        localStorage.setItem("users", JSON.stringify(users));
+
+
+
+        // AJAX POST
+        const xhr = new XMLHttpRequest();
+
+        xhr.open(
+            "POST",
+            "https://jsonplaceholder.typicode.com/posts",
+            true
+        );
+
+        xhr.setRequestHeader(
+            "Content-Type",
+            "application/json"
+        );
+
+
+
+        xhr.onload = function(){
+
+            if(xhr.status === 201){
+
+                alert("User Created Successfully");
+
+                // Refresh table
+                displayUsers();
+
+                // Reset form
+                form.reset();
+
+
+                // Close modal
+                const modal =
+                bootstrap.Modal.getInstance(
+                    document.getElementById("userModal")
+                );
+
+                modal.hide();
+            }
+
+        };
+
+
+        xhr.send(JSON.stringify(user));
+
+    });
+
+
+
+
+
+    // Display Users
+    function displayUsers(){
+
+        // Clear table first
+        userTable.innerHTML = "";
+
+
+        // Get users
+        let users =
+        JSON.parse(localStorage.getItem("users")) || [];
+
+
+
+        // Loop
+        users.forEach(function(user){
+
+            userTable.innerHTML += `
+
+                <tr>
+
+                    <td>${user.name}</td>
+
+                    <td>${user.email}</td>
+
+                    <td>${user.password}</td>
+
+                </tr>
+
+            `;
+
+        });
+
+    }
+
+</script>
+
+</body>
+
+</html>
