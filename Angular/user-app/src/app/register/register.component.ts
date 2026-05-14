@@ -20,23 +20,38 @@ export class RegisterComponent {
 
   registerUser(){
 
-    const user = {
+  // Remove extra spaces
+  this.name = this.name.trim();
+  this.email = this.email.trim();
+  this.password = this.password.trim();
 
-      name: this.name,
-      email: this.email,
-      password: this.password
-
-    };
-
-    localStorage.setItem(
-      'user',
-      JSON.stringify(user)
-    );
-
-    alert("Registration Successful");
-
-    this.router.navigate(['/login']);
-
+  // Check empty fields
+  if(
+    this.name === '' ||
+    this.email === '' ||
+    this.password === ''
+  ){
+    alert("All fields are required");
+    return;
   }
+
+  const user = {
+
+    name: this.name,
+    email: this.email,
+    password: this.password
+
+  };
+
+  localStorage.setItem(
+    'user',
+    JSON.stringify(user)
+  );
+
+  alert("Registration Successful");
+
+  this.router.navigate(['/login']);
+
+}
 
 }
